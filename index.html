@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adithya's Daily HQ</title>
+<title>Adithya's Daily HQ — myhq.adithyareddy.online</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<!-- ✅ STEP 1: Supabase CDN -->
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -28,73 +26,83 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
 .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+
+/* ── SIDEBAR ── */
 .sidebar{background:var(--text);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .sb-head{padding:24px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.07)}
 .sb-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;display:flex;align-items:center;gap:8px}
 .sb-logo em{color:var(--accent);font-style:normal}
-.sb-sub{font-size:11px;color:rgba(255,255,255,0.35);margin-top:3px}
+.sb-sub{font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:0.5px}
 .sb-user{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.07)}
 .sb-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#fff}
 .sb-date{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px}
-.sb-prog{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.07)}
-.sb-prog-top{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.sb-prog{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.sb-prog-top{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .sb-bar{height:3px;background:rgba(255,255,255,0.08);border-radius:2px}
 .sb-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.6s ease}
-.sb-nav{padding:14px 12px;flex:1}
-.sb-sec-label{font-size:9px;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:2px;padding:0 8px;margin-bottom:6px;margin-top:4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;cursor:pointer;transition:background 0.15s;margin-bottom:1px}
+.sb-nav{padding:12px 12px;flex:1}
+.sb-sec-label{font-size:9px;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:2px;padding:0 8px;margin-bottom:5px;margin-top:6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;transition:background 0.15s;margin-bottom:1px}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
 .nav-item.active{background:rgba(255,255,255,0.1)}
 .nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.nav-label{font-size:12px;color:rgba(255,255,255,0.6);flex:1;line-height:1.3}
+.nav-label{font-size:12px;color:rgba(255,255,255,0.55);flex:1;line-height:1.3}
 .nav-item.active .nav-label{color:#fff;font-weight:500}
-.nav-count{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;color:rgba(255,255,255,0.25)}
-.sb-btn{margin:12px;padding:10px;background:rgba(232,97,42,0.12);border:1px solid rgba(232,97,42,0.25);color:var(--accent);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;width:calc(100% - 24px)}
+.nav-count{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;color:rgba(255,255,255,0.22)}
+.sb-btn{margin:10px 12px;padding:10px;background:rgba(232,97,42,0.12);border:1px solid rgba(232,97,42,0.25);color:var(--accent);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;width:calc(100% - 24px)}
 .sb-btn:hover{background:rgba(232,97,42,0.22)}
 .sb-btn.on{background:rgba(42,158,92,0.12);border-color:rgba(42,158,92,0.25);color:var(--green)}
+
+/* ── MAIN ── */
 .main{display:flex;flex-direction:column;overflow:hidden}
 .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--card);position:sticky;top:0;z-index:50}
-.tab{padding:14px 24px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.5px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase}
+.tab{padding:14px 22px;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.8px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase}
 .tab:hover{color:var(--text)}
 .tab.active{color:var(--accent);border-color:var(--accent)}
-.pane{display:none;padding:28px 32px;overflow-y:auto;flex:1}
+.pane{display:none;padding:28px 32px;overflow-y:auto;flex:1;height:calc(100vh - 50px)}
 .pane.active{display:block}
-.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.page-h{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;letter-spacing:-1px}
+.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.page-h{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.8px}
 .page-h span{color:var(--accent)}
-.add-btn{background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px 18px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s}
+.add-btn{background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;padding:9px 16px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:transform 0.2s,box-shadow 0.2s}
 .add-btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 rgba(232,97,42,0.2)}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
 .stat-box{background:var(--card);border:1px solid var(--border);padding:14px 16px;transition:border-color 0.2s}
 .stat-box:hover{border-color:var(--accent)}
 .stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-1px;line-height:1;margin-bottom:3px}
 .stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.task-section{margin-bottom:20px}
-.ts-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.ts-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
+
+/* ── TASK SECTIONS ── */
+.task-section{margin-bottom:18px}
+.ts-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.ts-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;display:flex;align-items:center;gap:8px}
 .ts-badge{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;padding:2px 8px;letter-spacing:0.5px}
 .task-list{display:flex;flex-direction:column;gap:4px}
-.task-card{background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:flex-start;gap:10px;transition:border-color 0.15s,box-shadow 0.15s;cursor:pointer;position:relative}
+.task-card{background:var(--card);border:1px solid var(--border);padding:11px 13px;display:flex;align-items:flex-start;gap:10px;transition:border-color 0.15s,box-shadow 0.15s;cursor:pointer;position:relative}
 .task-card:hover{border-color:var(--border2);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-.task-card.done{opacity:0.45}
+.task-card.done{opacity:0.42}
 .task-card.done .tc-text{text-decoration:line-through;color:var(--muted)}
-.tc-check{width:18px;height:18px;border:2px solid var(--border2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;margin-top:1px;cursor:pointer;flex-shrink:0}
+.tc-check{width:17px;height:17px;border:2px solid var(--border2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;margin-top:2px;cursor:pointer}
 .tc-check:hover{border-color:var(--green)}
 .tc-check.checked{background:var(--green);border-color:var(--green)}
 .tc-check.checked::after{content:'✓';color:#fff;font-size:10px;font-weight:700}
 .tc-body{flex:1;min-width:0}
 .tc-text{font-size:13px;line-height:1.4;margin-bottom:5px}
-.tc-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.tc-cat{font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;padding:2px 6px;text-transform:uppercase}
+.tc-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.tc-cat{font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.8px;padding:2px 6px;text-transform:uppercase}
 .tc-pri{font-size:9px;font-family:'Syne',sans-serif;font-weight:700;padding:2px 6px}
 .tc-time{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px}
-.tc-timer{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);padding:2px 8px;border:1px solid rgba(232,97,42,0.2);background:var(--a3)}
+.tc-timer{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;color:var(--green);padding:2px 7px;border:1px solid rgba(42,158,92,0.25);background:var(--g2)}
 .tc-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
 .tc-actions{display:flex;gap:3px;opacity:0;transition:opacity 0.15s}
 .task-card:hover .tc-actions{opacity:1}
 .tc-btn{background:none;border:1px solid var(--border);padding:3px 7px;font-size:10px;cursor:pointer;color:var(--muted);transition:all 0.15s}
 .tc-btn:hover{border-color:var(--accent);color:var(--accent)}
 .tc-btn.del:hover{border-color:var(--red);color:var(--red)}
+
+/* ── CALENDAR ── */
 .cal-wrap{background:var(--card);border:1px solid var(--border);margin-bottom:24px}
 .cal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
 .cal-month{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.5px}
@@ -102,77 +110,87 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .cal-nav-btn{background:none;border:1px solid var(--border);width:28px;height:28px;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s;display:flex;align-items:center;justify-content:center}
 .cal-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr)}
-.cal-day-head{padding:8px 4px;text-align:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
-.cal-day{padding:8px 6px;min-height:64px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;position:relative}
+.cal-day-head{padding:8px 4px;text-align:center;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+.cal-day{padding:8px 6px;min-height:68px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;position:relative}
 .cal-day:nth-child(7n){border-right:none}
 .cal-day:hover{background:var(--bg2)}
 .cal-day.today{background:var(--a3)}
-.cal-day.selected{background:rgba(232,97,42,0.08);border-color:rgba(232,97,42,0.3)}
-.cal-day.other-month{opacity:0.3}
+.cal-day.selected{background:rgba(232,97,42,0.07);outline:2px solid rgba(232,97,42,0.35);outline-offset:-1px}
+.cal-day.other-month{opacity:0.28}
 .cal-day-num{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px}
 .cal-day.today .cal-day-num{color:var(--accent)}
 .cal-dot-row{display:flex;gap:2px;flex-wrap:wrap}
 .cal-dot{width:5px;height:5px;border-radius:50%}
 .cal-sel-tasks{border-top:1px solid var(--border);padding:16px 20px}
-.cal-sel-label{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
-.cal-add-day{background:none;border:1px solid var(--border);padding:4px 10px;font-size:11px;cursor:pointer;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all 0.15s}
-.cal-add-day:hover{border-color:var(--accent);color:var(--accent)}
-.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-.note-card{background:var(--card);border:1px solid var(--border);padding:16px}
+.cal-sel-label{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.cal-action-btns{display:flex;gap:6px}
+.cal-add-day{background:var(--accent);color:#fff;border:none;padding:5px 12px;font-size:11px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;transition:opacity 0.15s}
+.cal-add-day:hover{opacity:0.85}
+.cal-empty-day{padding:20px;text-align:center;color:var(--muted);font-size:12px;border:1px dashed var(--border)}
+
+/* ── NOTES ── */
+.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px}
+.note-card{background:var(--card);border:1px solid var(--border);padding:16px;position:relative}
 .note-label{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
-.note-ta{width:100%;min-height:100px;border:none;outline:none;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:transparent;line-height:1.6}
+.note-ta{width:100%;min-height:110px;border:none;outline:none;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:transparent;line-height:1.6}
 .note-ta::placeholder{color:var(--muted2)}
-.save-note-btn{background:var(--text);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;padding:7px 14px;cursor:pointer;margin-top:10px;transition:background 0.2s}
+.save-note-btn{background:var(--text);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:10px;padding:6px 14px;cursor:pointer;margin-top:10px;transition:background 0.2s;letter-spacing:0.5px}
 .save-note-btn:hover{background:var(--accent)}
+
+/* ── MODALS ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);padding:20px}
 .overlay.open{display:flex}
-.modal{background:var(--card);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative;animation:modalIn 0.2s ease}
-@keyframes modalIn{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-head{padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between}
-.modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.5px}
-.modal-x{background:none;border:1px solid var(--border);width:30px;height:30px;cursor:pointer;font-size:14px;color:var(--muted);transition:all 0.15s;display:flex;align-items:center;justify-content:center}
+.modal{background:var(--card);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative;animation:modalIn 0.18s ease}
+@keyframes modalIn{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-head{padding:22px 24px 0;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;letter-spacing:-0.5px}
+.modal-x{background:none;border:1px solid var(--border);width:28px;height:28px;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s;display:flex;align-items:center;justify-content:center}
 .modal-x:hover{border-color:var(--red);color:var(--red)}
-.modal-body{padding:20px 24px 24px}
-.fg{margin-bottom:14px}
-.fl{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;display:block}
-.fi{width:100%;border:1px solid var(--border);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.15s}
+.modal-body{padding:18px 24px 22px}
+.fg{margin-bottom:13px}
+.fl{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;display:block}
+.fi{width:100%;border:1px solid var(--border);padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.15s}
 .fi:focus{border-color:var(--accent)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sub-btn{background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:12px;cursor:pointer;width:100%;transition:opacity 0.2s}
+.sub-btn{background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:11px;cursor:pointer;width:100%;transition:opacity 0.2s;margin-top:4px}
 .sub-btn:hover{opacity:0.9}
+
+/* ── DETAIL MODAL ── */
 .detail-modal{max-width:560px}
-.detail-head{padding:24px;border-bottom:1px solid var(--border)}
-.detail-cat-badge{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;padding:3px 10px;text-transform:uppercase;margin-bottom:12px;display:inline-block}
-.detail-title{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.5px;line-height:1.3;margin-bottom:10px}
-.detail-meta{display:flex;gap:8px;flex-wrap:wrap}
-.detail-body{padding:20px 24px}
-.detail-section-label{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:16px}
+.detail-head{padding:22px 24px;border-bottom:1px solid var(--border)}
+.detail-cat-badge{font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;padding:3px 10px;text-transform:uppercase;margin-bottom:10px;display:inline-block}
+.detail-title{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.5px;line-height:1.3;margin-bottom:10px}
+.detail-meta{display:flex;gap:6px;flex-wrap:wrap}
+.detail-body{padding:18px 24px}
+.detail-section-label{font-family:'Syne',sans-serif;font-weight:700;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:14px}
 .detail-section-label:first-child{margin-top:0}
-.detail-timer{padding:16px;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;background:var(--bg2)}
-.detail-timer-display{font-family:'Syne',sans-serif;font-weight:800;font-size:32px;letter-spacing:-2px;color:var(--accent)}
-.detail-timer-btns{display:flex;gap:8px}
-.dt-btn{border:none;padding:8px 16px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:opacity 0.2s}
+.detail-timer{padding:14px 16px;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2)}
+.detail-timer-display{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;letter-spacing:-2px;color:var(--accent)}
+.detail-timer-btns{display:flex;gap:6px}
+.dt-btn{border:none;padding:7px 14px;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;cursor:pointer;transition:opacity 0.2s}
 .dt-start{background:var(--green);color:#fff}
 .dt-pause{background:var(--yellow);color:#fff}
 .dt-reset{background:var(--border2);color:var(--muted)}
 .dt-btn:hover{opacity:0.8}
+.detail-est{font-size:10px;color:var(--muted);margin-top:5px;margin-bottom:2px}
 .subtask-list{list-style:none}
 .subtask-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:flex-start}
 .subtask-item:last-child{border-bottom:none}
-.subtask-check{width:16px;height:16px;border:2px solid var(--border2);border-radius:3px;flex-shrink:0;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.subtask-check{width:15px;height:15px;border:2px solid var(--border2);border-radius:3px;flex-shrink:0;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
 .subtask-check:hover{border-color:var(--green)}
 .subtask-check.done{background:var(--green);border-color:var(--green)}
 .subtask-check.done::after{content:'✓';font-size:9px;color:#fff;font-weight:700}
-.subtask-text{flex:1;color:var(--muted);line-height:1.4}
+.subtask-text{flex:1;color:var(--muted);line-height:1.4;font-size:13px}
 .subtask-text.done-text{text-decoration:line-through;color:var(--muted2)}
-.detail-notes-ta{width:100%;min-height:80px;border:1px solid var(--border);padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;resize:vertical}
+.detail-notes-ta{width:100%;min-height:70px;border:1px solid var(--border);padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;resize:vertical}
 .detail-notes-ta:focus{border-color:var(--accent)}
-.detail-footer{padding:0 24px 24px;display:flex;gap:8px}
-.df-btn{flex:1;padding:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:none;transition:opacity 0.2s}
+.detail-footer{padding:0 24px 22px;display:flex;gap:6px}
+.df-btn{flex:1;padding:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;transition:opacity 0.2s}
 .df-btn:hover{opacity:0.85}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:#fff;padding:10px 18px;font-size:12px;z-index:3000;transform:translateY(60px);opacity:0;transition:all 0.3s;pointer-events:none}
+
+/* ── MISC ── */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:#fff;padding:10px 18px;font-size:12px;z-index:3000;transform:translateY(60px);opacity:0;transition:all 0.3s;pointer-events:none;font-family:'Syne',sans-serif;font-weight:600}
 .toast.show{transform:translateY(0);opacity:1}
-/* Loading overlay */
 .loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:12px}
 .loading-screen.hidden{display:none}
 .loading-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--text)}
@@ -181,7 +199,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .loading-bar{height:100%;background:var(--accent);border-radius:2px;animation:loadBar 1.5s ease-in-out infinite}
 @keyframes loadBar{0%{width:0%;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0%;margin-left:100%}}
 .loading-text{font-size:12px;color:var(--muted)}
-.c-eject{background:var(--a3);color:var(--accent)}
+
+/* ── CATEGORY / PRIORITY COLORS ── */
+.c-eject{background:var(--a2);color:var(--accent)}
 .c-ejkl{background:var(--b2);color:var(--blue)}
 .c-getmama{background:var(--y2);color:var(--yellow)}
 .c-crossea{background:var(--p2);color:var(--purple)}
@@ -190,25 +210,32 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .p-high{background:var(--r2);color:var(--red)}
 .p-med{background:var(--y2);color:var(--yellow)}
 .p-low{background:var(--g2);color:var(--green)}
-.empty{padding:24px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed var(--border)}
-.empty span{font-size:24px;display:block;margin-bottom:6px}
-@media(max-width:800px){
+.empty{padding:22px;text-align:center;color:var(--muted);font-size:12px;border:1px dashed var(--border)}
+.empty span{font-size:22px;display:block;margin-bottom:5px}
+
+/* ── PROJECT PREVIEW (detail modal) ── */
+.project-preview{background:var(--bg2);border:1px solid var(--border);padding:12px 14px;margin-top:4px}
+.project-preview-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.8px;color:var(--muted);margin-bottom:8px;text-transform:uppercase}
+.project-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
+.project-item:last-child{border:none;padding-bottom:0}
+.project-num{font-family:'Syne',sans-serif;font-weight:800;font-size:10px;color:var(--accent);width:18px;flex-shrink:0;margin-top:1px}
+
+@media(max-width:900px){
   .app{grid-template-columns:1fr}
   .sidebar{position:relative;height:auto}
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .notes-grid{grid-template-columns:1fr}
   .frow{grid-template-columns:1fr}
-  .pane{padding:16px}
+  .pane{padding:16px;height:auto}
 }
 </style>
 </head>
 <body>
 
-<!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
   <div class="loading-logo">Daily <em>HQ</em> 🦁</div>
   <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
-  <div class="loading-text">Connecting to database...</div>
+  <div class="loading-text" id="loadingText">Connecting to database...</div>
 </div>
 
 <div class="app">
@@ -216,24 +243,24 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 <div class="sidebar">
   <div class="sb-head">
     <div class="sb-logo">Daily <em>HQ</em> 🦁</div>
-    <div class="sb-sub">adithyareddy.online</div>
+    <div class="sb-sub">myhq.adithyareddy.online</div>
   </div>
   <div class="sb-user">
     <div class="sb-name">Adithya Reddy 👋</div>
     <div class="sb-date" id="sbDate"></div>
   </div>
   <div class="sb-prog">
-    <div class="sb-prog-top"><span>Today</span><span id="sbPct">0%</span></div>
+    <div class="sb-prog-top"><span>Today's Progress</span><span id="sbPct">0%</span></div>
     <div class="sb-bar"><div class="sb-fill" id="sbFill" style="width:0%"></div></div>
   </div>
   <div class="sb-nav">
     <div class="sb-sec-label">Views</div>
     <div class="nav-item active" onclick="setFilter('all')">
-      <div class="nav-dot" style="background:#aaa"></div>
+      <div class="nav-dot" style="background:#888"></div>
       <div class="nav-label">All Tasks</div>
       <div class="nav-count" id="nc-all">0</div>
     </div>
-    <div class="sb-sec-label" style="margin-top:10px">Companies</div>
+    <div class="sb-sec-label" style="margin-top:8px">Companies</div>
     <div class="nav-item" onclick="setFilter('eject')">
       <div class="nav-dot" style="background:var(--accent)"></div>
       <div class="nav-label">Eject Solutions</div>
@@ -266,6 +293,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
   <button class="sb-btn" id="notifBtn" onclick="toggleNotif()">🔔 Enable Reminders</button>
+  <button class="sb-btn" id="seedBtn" onclick="forceReseed()" style="background:rgba(42,110,232,0.1);border-color:rgba(42,110,232,0.25);color:var(--blue);margin-top:0">🔄 Load Default Tasks</button>
 </div>
 
 <!-- ══ MAIN ══ -->
@@ -276,6 +304,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <div class="tab" onclick="switchTab('notes')">📝 Notes</div>
   </div>
 
+  <!-- TASKS PANE -->
   <div class="pane active" id="pane-tasks">
     <div class="top-row">
       <div class="page-h">Today's <span>Plan</span></div>
@@ -307,10 +336,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
 
+  <!-- CALENDAR PANE -->
   <div class="pane" id="pane-calendar">
     <div class="top-row">
       <div class="page-h">📅 <span>Calendar</span></div>
-      <button class="add-btn" onclick="openAdd()">+ Add Task</button>
+      <button class="add-btn" onclick="openAddForDate()">+ Add Task</button>
     </div>
     <div class="cal-wrap">
       <div class="cal-head">
@@ -324,21 +354,22 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       <div class="cal-sel-tasks">
         <div class="cal-sel-label">
           <span id="calSelLabel">Click a date to see tasks</span>
-          <button class="cal-add-day" onclick="openAddForDate()">+ Add for this day</button>
+          <div class="cal-action-btns">
+            <button class="cal-add-day" onclick="openAddForDate()">+ Add for this day</button>
+          </div>
         </div>
         <div class="task-list" id="calDayTasks"></div>
       </div>
     </div>
   </div>
 
+  <!-- NOTES PANE -->
   <div class="pane" id="pane-notes">
     <div class="top-row">
       <div class="page-h">📝 <span>Notes</span></div>
-    </div>
-    <div class="notes-grid" id="notes-grid"></div>
-    <div style="margin-top:16px">
       <button class="add-btn" onclick="addNoteCard()">+ New Note</button>
     </div>
+    <div class="notes-grid" id="notes-grid"></div>
   </div>
 </div>
 </div>
@@ -357,8 +388,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
         <input class="fi" type="text" id="fText" placeholder="What needs to be done?">
       </div>
       <div class="fg">
-        <label class="fl">Details / Subtasks (one per line)</label>
-        <textarea class="fi" id="fDetails" rows="3" placeholder="Break it down..." style="resize:vertical"></textarea>
+        <label class="fl">Steps / Subtasks (one per line)</label>
+        <textarea class="fi" id="fDetails" rows="4" placeholder="Break it down — each line becomes a checkable step" style="resize:vertical"></textarea>
       </div>
       <div class="frow">
         <div class="fg">
@@ -393,7 +424,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       </div>
       <div class="fg">
         <label class="fl">Estimated Duration (mins)</label>
-        <input class="fi" type="number" id="fDur" placeholder="e.g. 30" min="1" max="480">
+        <input class="fi" type="number" id="fDur" placeholder="e.g. 45" min="1" max="480">
       </div>
       <button class="sub-btn" onclick="saveTask()">Save Task →</button>
     </div>
@@ -405,9 +436,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="modal detail-modal">
     <div class="detail-head">
       <div class="detail-cat-badge" id="d-cat"></div>
-      <div style="display:flex;align-items:start;justify-content:space-between;gap:12px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
         <div class="detail-title" id="d-title"></div>
-        <button class="modal-x" onclick="closeModal('detailModal')" style="flex-shrink:0;margin-top:4px">✕</button>
+        <button class="modal-x" onclick="closeModal('detailModal')" style="flex-shrink:0;margin-top:2px">✕</button>
       </div>
       <div class="detail-meta" id="d-meta"></div>
     </div>
@@ -420,16 +451,18 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
           <button class="dt-btn dt-reset" onclick="timerReset()">↺ Reset</button>
         </div>
       </div>
-      <div id="d-est" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
+      <div class="detail-est" id="d-est"></div>
+
       <div id="d-subtasks-wrap" style="display:none">
-        <div class="detail-section-label">📋 Subtasks</div>
+        <div class="detail-section-label">📋 Steps to Complete</div>
         <ul class="subtask-list" id="d-subtasks"></ul>
       </div>
-      <div class="detail-section-label">📝 Notes for this task</div>
-      <textarea class="detail-notes-ta" id="d-notes" placeholder="Add notes, links, context..."></textarea>
+
+      <div class="detail-section-label">📝 Task Notes</div>
+      <textarea class="detail-notes-ta" id="d-notes" placeholder="Add context, links, progress notes..."></textarea>
     </div>
     <div class="detail-footer">
-      <button class="df-btn" style="background:var(--green);color:#fff" onclick="detailCheck()">✓ Mark Complete</button>
+      <button class="df-btn" id="d-complete-btn" style="background:var(--green);color:#fff" onclick="detailCheck()">✓ Mark Complete</button>
       <button class="df-btn" style="background:var(--bg3);color:var(--text)" onclick="detailEdit()">✏ Edit</button>
       <button class="df-btn" style="background:var(--r2);color:var(--red)" onclick="detailDelete()">🗑 Delete</button>
     </div>
@@ -439,20 +472,15 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════
-// ✅ STEP 2: Supabase Init
-// Replace these with YOUR values from:
-// Supabase Dashboard → Project Settings → API
-// ══════════════════════════════════════════
-const SUPABASE_URL = 'https://hghvkvxioqiqvejmwwma.supabase.co'  // ← paste your project URL
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhnaHZrdnhpb3FpcXZlam13d21hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5OTQ1MzEsImV4cCI6MjA4NzU3MDUzMX0.yAEn13wzqj4ekXwOm5OtjezWQzpWCiOb0zRWrsAsmTw'            // ← paste your anon key (eyJ...)
-
+// ══ SUPABASE ══
+const SUPABASE_URL = 'https://hghvkvxioqiqvejmwwma.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhnaHZrdnhpb3FpcXZlam13d21hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5OTQ1MzEsImV4cCI6MjA4NzU3MDUzMX0.yAEn13wzqj4ekXwOm5OtjezWQzpWCiOb0zRWrsAsmTw'
 const { createClient } = supabase
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // ══ STATE ══
 let tasks=[], notesData={}, notifOn=false, activeFilter='all';
-let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
+let calYear=new Date().getFullYear(), calMonthIdx=new Date().getMonth();
 let calSelDate=new Date().toISOString().split('T')[0];
 let detailId=null, timerInterval=null, timerSec=0, timerRunning=false;
 let editingId=null;
@@ -460,174 +488,144 @@ let editingId=null;
 const TODAY=new Date().toISOString().split('T')[0];
 
 const CATS={
-  eject:{label:'Eject Solutions',color:'var(--accent)',cls:'c-eject'},
-  ejkl:{label:'EJ × KL Radio',color:'var(--blue)',cls:'c-ejkl'},
-  getmama:{label:'GetMama',color:'var(--yellow)',cls:'c-getmama'},
-  crossea:{label:'Crossea',color:'var(--purple)',cls:'c-crossea'},
-  infra:{label:'Infrastructure',color:'var(--teal)',cls:'c-infra'},
-  personal:{label:'Personal',color:'var(--green)',cls:'c-personal'},
+  eject:  {label:'Eject Solutions', color:'var(--accent)', cls:'c-eject'},
+  ejkl:   {label:'EJ × KL Radio',   color:'var(--blue)',   cls:'c-ejkl'},
+  getmama:{label:'GetMama',          color:'var(--yellow)', cls:'c-getmama'},
+  crossea:{label:'Crossea',          color:'var(--purple)', cls:'c-crossea'},
+  infra:  {label:'Infrastructure',   color:'var(--teal)',   cls:'c-infra'},
+  personal:{label:'Personal',        color:'var(--green)',  cls:'c-personal'},
 };
 
-// ══════════════════════════════════════════
-// ✅ STEP 3: Supabase helpers
-// Maps JS object ↔ DB row format
-// ══════════════════════════════════════════
-
-// JS task object → Supabase row
-function taskToRow(t) {
+// ══ DB MAPPERS ══
+function taskToRow(t){
   return {
-    id: t.id,
-    text: t.text || '',
-    details: t.details || '',
-    cat: t.cat || 'personal',
-    pri: t.pri || 'med',
-    date: t.date || '',
-    time: t.time || '',
-    dur: t.dur || 0,
-    done: t.done || false,
-    subtasks: t.subtasks || [],
-    task_notes: t.taskNotes || '',   // DB uses snake_case
-    elapsed: t.elapsed || 0,
-    created: t.created || new Date().toISOString()
+    id:t.id, text:t.text||'', details:t.details||'',
+    cat:t.cat||'personal', pri:t.pri||'med',
+    date:t.date||'', time:t.time||'', dur:t.dur||0,
+    done:t.done||false, subtasks:t.subtasks||[],
+    task_notes:t.taskNotes||'', elapsed:t.elapsed||0,
+    created:t.created||new Date().toISOString()
   }
 }
-
-// Supabase row → JS task object
-function rowToTask(r) {
-  return {
-    ...r,
-    taskNotes: r.task_notes || '',   // JS uses camelCase
-    subtasks: r.subtasks || [],
-    elapsed: r.elapsed || 0,
-  }
+function rowToTask(r){
+  return {...r, taskNotes:r.task_notes||'', subtasks:r.subtasks||[], elapsed:r.elapsed||0}
 }
 
-// ══════════════════════════════════════════
-// ✅ STEP 4: Load from Supabase
-// ══════════════════════════════════════════
-async function load() {
-  // ✅ FIX 1: Show cached data instantly — no waiting for Supabase
-  const cached = localStorage.getItem('dhq-tasks-cache')
-  if (cached) {
-    try {
-      tasks = JSON.parse(cached)
-      notesData = JSON.parse(localStorage.getItem('dhq-notes-cache') || '{}')
-    } catch(e) { tasks = []; notesData = {} }
+// ══ LOAD ══
+async function load(){
+  const cached=localStorage.getItem('dhq-tasks-cache')
+  if(cached){
+    try{tasks=JSON.parse(cached); notesData=JSON.parse(localStorage.getItem('dhq-notes-cache')||'{}')}
+    catch(e){tasks=[];notesData={}}
     document.getElementById('loadingScreen').classList.add('hidden')
-    renderAll(); renderNotes(); renderCal()
+    renderAll();renderNotes();renderCal()
   }
-
-  // ✅ Then sync with Supabase in background
-  try {
-    const { data: taskData, error: taskErr } = await db
-      .from('tasks')
-      .select('*')
-      .order('created', { ascending: true })
-
-    if (taskErr) throw taskErr
-    tasks = (taskData || []).map(rowToTask)
-
-    const { data: noteData } = await db
-      .from('notes')
-      .select('*')
-      .eq('id', 1)
-      .single()
-
-    notesData = noteData ? (noteData.data || {}) : {}
-
-    // Update local cache for next load
-    localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks))
-    localStorage.setItem('dhq-notes-cache', JSON.stringify(notesData))
-
-    if (!tasks.length) await seed()
-
-  } catch(e) {
-    console.error('Supabase sync error:', e)
-  }
-
+  try{
+    const {data:taskData,error:taskErr}=await db.from('tasks').select('*').order('created',{ascending:true})
+    if(taskErr) throw taskErr
+    tasks=(taskData||[]).map(rowToTask)
+    const {data:noteData}=await db.from('notes').select('*').eq('id',1).single()
+    notesData=noteData?(noteData.data||{}):{} 
+    localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks))
+    localStorage.setItem('dhq-notes-cache',JSON.stringify(notesData))
+    if(!tasks.length) await seed()
+  }catch(e){console.error('Supabase sync:',e)}
   document.getElementById('loadingScreen').classList.add('hidden')
-  renderAll(); renderNotes(); renderCal()
+  renderAll();renderNotes();renderCal()
 }
 
-// ══════════════════════════════════════════
-// ✅ STEP 5: Save tasks to Supabase (upsert)
-// ══════════════════════════════════════════
-async function saveTasks() {
-  if (!tasks.length) return
-  try {
-    const { error } = await db
-      .from('tasks')
-      .upsert(tasks.map(taskToRow), { onConflict: 'id' })
-    if (error) throw error
-  } catch(e) {
-    console.error('saveTasks error:', e)
-    showToast('⚠️ Save failed')
-  }
+// ══ SAVE ══
+async function saveTasks(){
+  if(!tasks.length) return
+  try{
+    const {error}=await db.from('tasks').upsert(tasks.map(taskToRow),{onConflict:'id'})
+    if(error) throw error
+  }catch(e){console.error('saveTasks:',e);showToast('⚠️ Save failed')}
+}
+async function saveNotes(){
+  try{
+    const {error}=await db.from('notes').upsert({id:1,data:notesData})
+    if(error) throw error
+  }catch(e){console.error('saveNotes:',e)}
 }
 
-// ══════════════════════════════════════════
-// ✅ STEP 6: Save notes to Supabase (upsert)
-// ══════════════════════════════════════════
-async function saveNotes() {
-  try {
-    const { error } = await db
-      .from('notes')
-      .upsert({ id: 1, data: notesData })
-    if (error) throw error
-  } catch(e) {
-    console.error('saveNotes error:', e)
-  }
-}
-
-// ══ SEED (first time only — inserts defaults) ══
-async function seed() {
+// ══ SEED ══
+async function seed(){
   const def=[
-    {text:'Deploy ejectsolutions.com — new website live',cat:'infra',pri:'high',date:TODAY,time:'18:00',dur:60,details:'Upload final build\nUpdate DNS records\nTest all links\nPost on social media after'},
-    {text:'Upload hirebotsai.online — update WhatsApp number',cat:'infra',pri:'high',date:TODAY,time:'17:00',dur:30,details:'Replace 919999999999 with actual number\nTest all WhatsApp click links\nVerify pricing section shows correctly'},
-    {text:'Activate TrueConnex n8n daily automation schedule',cat:'infra',pri:'med',date:TODAY,time:'',dur:20,details:'Toggle active in n8n\nVerify 8AM IST cron trigger\nTest run once manually'},
-    {text:'Create social media content — 3 day batch for Eject Solutions',cat:'eject',pri:'high',date:TODAY,time:'',dur:45,details:'Post 1: Internship applications open\nPost 2: What is Agentic AI\nPost 3: Behind the scenes of Eject\nAdd hashtags and tag relevant pages'},
-    {text:'Plan collabs with influencers and pages for internship',cat:'eject',pri:'med',date:TODAY,time:'',dur:30,details:'List 5 tech influencers in AP/TS\nDM template for collaboration ask\nMeme page options: Hyderabad student pages\nBudget: organic first'},
-    {text:'Filter 35 form responses — shortlist Batch 1',cat:'eject',pri:'high',date:TODAY,time:'',dur:30,details:'Filter getinternships.ejectsolutions.com responses\nFilter klradio.ejectsolutions.com responses\nCriteria: interest level, availability\nTarget: 15-20 confirmed'},
-    {text:'Draft Batch 1 screening mail',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:45,details:"Subject line: You're selected for screening\nBody: Project options overview\nLink: klscreening.ejectsolutions.com\nCTA: Fill form by [date]"},
-    {text:'Deploy klscreening.ejectsolutions.com website',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:60,details:'Create screening landing page\nProject selection UI\nSubscription info section\nTimeline per project\nSubmit/confirm button'},
-    {text:'Finalise and document all Batch 1 projects',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:60,details:'Project 1: Social Media Automation Bot\nProject 2: Invoice Generator Bot\nProject 3: Blog Content Engine\nProject 4: Ads Intelligence Bot\nProject 5: TrueConnex Automation\nProject 6: KL Radio Content Bot'},
-    {text:'Design sample student portal UI',cat:'ejkl',pri:'med',date:TODAY,time:'',dur:90,details:'Show project selection screen\nShow timeline view per project\nProgress tracker UI\nCertificate preview at end\nMobile-friendly design'},
-    {text:'Revise and finalise KLU pitch doc',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:45,details:'Update 35 responses stat\nAdd faculty meet section\nAdd batch flow diagram\nUpdate timeline to March dates'},
-    {text:'WhatsApp Shivakumar — confirm Vijayawada trip date',cat:'ejkl',pri:'high',date:TODAY,time:'15:00',dur:5,details:'Ask him to set up Sridhar and Srinath meetings same day\nTarget date: Mar 3-5'},
-    {text:'Deploy socialgetmama.vercel.app automation bot',cat:'getmama',pri:'high',date:TODAY,time:'',dur:60,details:'Activate n8n workflow for GetMama\nConnect Meta, Pinterest, WhatsApp, Telegram, X\nTest first automated post\nVerify Google Sheets dashboard syncing'},
-    {text:'Create getmama.online landing page',cat:'getmama',pri:'high',date:TODAY,time:'',dur:90,details:'Hero: automation for small businesses\nServices section\nPricing: ₹3k / ₹12k\nFB forms integration\nWhatsApp CTA button'},
-    {text:'Post GetMama intro content on all platforms',cat:'getmama',pri:'med',date:TODAY,time:'',dur:30,details:'Meta (Instagram + Facebook)\nPinterest board\nWhatsApp business communities\nTelegram groups\nX (Twitter)'},
-    {text:'Finalise Crossea website UI',cat:'crossea',pri:'high',date:TODAY,time:'',dur:90,details:'Review current crossea.vercel.app\nDecide: keep or redesign?\nSections needed: hero, services, about, contact\nBrand colors and fonts\nMobile responsive'},
-    {text:'Create 3-day social media content batch for Crossea',cat:'crossea',pri:'med',date:TODAY,time:'',dur:30,details:'Post 1: What is Crossea\nPost 2: Import-export made easy\nPost 3: Industry stat + insight\nHashtags: logistics, export, B2B'},
-    {text:'Plan influencer collabs for Crossea',cat:'crossea',pri:'low',date:TODAY,time:'',dur:20,details:'Find logistics/export pages on LinkedIn\nIdentify B2B influencers\nDM template for collab ask'},
-    {text:'Message ₹6k person — 2-3 day extension request',cat:'personal',pri:'high',date:TODAY,time:'14:00',dur:2,details:'Send on WhatsApp\nDo not over-explain'},
-    {text:'Send Message 2 to Joseph anna — show KL Radio work',cat:'personal',pri:'high',date:TODAY,time:'16:00',dur:5,details:'Keep casual\nDon\'t mention money yet'},
-    {text:'Check on plants 🌱',cat:'personal',pri:'low',date:TODAY,time:'',dur:5,details:'Water if needed\nCheck sunlight\nNote any new growth'},
-    {text:'Manage all subscriptions — list in one place',cat:'personal',pri:'med',date:TODAY,time:'',dur:20,details:'List all active subscriptions\nNote monthly cost of each\nCancel unused ones\nTrack in Google Sheets'},
-    {text:'30 mins AMCAT/Elitmus prep',cat:'personal',pri:'med',date:TODAY,time:'',dur:30,details:'Today topic: Data Analysis basics\nDo 10 practice questions\nNote weak areas for tomorrow'},
-    {text:'Drink water + eat something 🍎',cat:'personal',pri:'low',date:TODAY,time:'13:00',dur:5,details:'Glass of water first\nFruits if available\nBiryani allowed at night 😄'},
+    // ── INFRA ──
+    {text:'Deploy ejectsolutions.com — new website live',cat:'infra',pri:'high',date:TODAY,time:'18:00',dur:60,
+      details:'Upload final build\nUpdate DNS records\nTest all links and forms\nVerify mobile responsiveness\nPost on social media after going live'},
+    {text:'Deploy klscreening.ejectsolutions.com — Batch 1 screening site',cat:'infra',pri:'high',date:TODAY,time:'17:00',dur:60,
+      details:'Create screening landing page\nProject selection UI (6 projects listed)\nSubscription info section\nTimeline per project\nSubmit / confirm button\nTest form submissions'},
+    {text:'Activate TrueConnex n8n daily automation schedule',cat:'infra',pri:'med',date:TODAY,time:'',dur:20,
+      details:'Toggle active in n8n dashboard\nVerify 8AM IST cron trigger fires correctly\nRun manual test once\nCheck Slack/email notification on trigger'},
+    {text:'Deploy socialgetmama.vercel.app automation bot',cat:'infra',pri:'high',date:TODAY,time:'',dur:60,
+      details:'Activate n8n workflow for GetMama social posting\nConnect Meta, Pinterest, WhatsApp, Telegram, X\nTest first automated post on all platforms\nVerify Google Sheets dashboard syncing\nCheck error logs and webhook responses'},
+
+    // ── EJ × KL RADIO ──
+    {text:'Draft Batch 1 screening mail and send to shortlisted 15-20',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:45,
+      details:"Subject: You're shortlisted for KL Radio Batch 1!\nIntro paragraph: what the programme is\nList of 6 project options with 1-line description each\nLink to klscreening.ejectsolutions.com\nCTA: Select your project by [date]\nTone: warm, professional, exciting\nSend via Gmail or n8n automation"},
+    {text:'Decide and document all Batch 1 finalised projects',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:60,
+      details:'Project 1: Social Media Automation Bot\nProject 2: Invoice Generator Bot\nProject 3: Blog Content Engine\nProject 4: Ads Intelligence Bot\nProject 5: TrueConnex Automation\nProject 6: KL Radio Content Bot\nFor each: define deliverable, tech stack, timeline (4-6 weeks), mentor\nSave in shared Notion / Google Doc'},
+    {text:'Design sample student portal UI — project selection + timeline view',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:90,
+      details:'Screen 1: Project selection (card grid with project name, description, difficulty)\nScreen 2: Timeline view — weekly milestones for selected project\nScreen 3: Progress tracker (% complete, current task, next step)\nScreen 4: Certificate preview on completion\nMobile-first design\nSave as Figma or HTML prototype'},
+    {text:'Revise and finalise KLU pitch doc',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:45,
+      details:'Update stat: 35+ form responses received\nAdd faculty outreach section (Sridhar and Srinath)\nAdd batch flow diagram (Application → Screening → Project → Certificate)\nUpdate timeline to March dates\nAdd student portal preview screenshots\nFinalise with Canva / Google Slides'},
+    {text:'Filter 35 form responses — shortlist Batch 1 candidates',cat:'ejkl',pri:'high',date:TODAY,time:'',dur:30,
+      details:'Filter getinternships.ejectsolutions.com responses\nFilter klradio.ejectsolutions.com responses\nCriteria: interest level, project preference, availability\nTarget: 15-20 confirmed students\nCreate shortlist spreadsheet with contact details'},
+    {text:'WhatsApp Shivakumar — confirm Vijayawada trip date',cat:'ejkl',pri:'high',date:TODAY,time:'15:00',dur:5,
+      details:'Ask him to coordinate Sridhar and Srinath meetings same day\nTarget visit date: March 3–5\nKeep message casual but confirm by today'},
+
+    // ── GETMAMA ──
+    {text:'Create getmama.online landing page',cat:'getmama',pri:'high',date:TODAY,time:'',dur:90,
+      details:'Hero section: "Automation for growing businesses"\nServices: social media, WhatsApp bots, lead gen, content\nPricing: ₹3,000/mo Starter | ₹12,000/mo Pro\nFacebook Forms integration for lead capture\nWhatsApp CTA button (click-to-chat)\nLink to social.getmama.online for full details\nMobile responsive, fast load'},
+    {text:'Post GetMama intro content across all platforms',cat:'getmama',pri:'med',date:TODAY,time:'',dur:30,
+      details:'Meta (Instagram + Facebook page)\nPinterest board: GetMama automation\nWhatsApp business communities\nTelegram groups (startup / SMB focused)\nX (Twitter) thread: 5 tweets introducing GetMama\nCaption: "We automate the boring stuff so you can focus on growing"'},
+    {text:'Replace HirebotsAI references → GetMama across all assets',cat:'getmama',pri:'high',date:TODAY,time:'',dur:20,
+      details:'Update hirebotsai.online WhatsApp number to actual number\nChange brand name everywhere on site\nUpdate LinkedIn / Instagram bio\nCheck and update any n8n workflow labels\nVerify pricing section shows correctly after update'},
+
+    // ── EJECT SOLUTIONS ──
+    {text:'Create 3-day social media content batch for Eject Solutions',cat:'eject',pri:'high',date:TODAY,time:'',dur:45,
+      details:'Post 1: Internship applications are open — link in bio\nPost 2: What is Agentic AI? (educational carousel)\nPost 3: Behind the scenes at Eject (team / workspace)\nPost 4: Meme — "When your automation runs at 2AM"\nCaption templates for each\nSchedule: today, tomorrow, day after\nHashtags: #AgenticAI #EjectSolutions #TechStartup'},
+    {text:'Plan influencer + page collabs for internship programme',cat:'eject',pri:'med',date:TODAY,time:'',dur:30,
+      details:'List 5 tech influencers in AP/TS with follower count\nIdentify 5 college meme pages (Hyderabad, VJA)\nDM template for collab ask (paid + organic options)\nBudget: organic first, max ₹500 per meme page\nTarget: 500+ new form responses in 7 days'},
+
+    // ── CROSSEA ──
+    {text:'Finalise and ship Crossea website UI',cat:'crossea',pri:'high',date:TODAY,time:'',dur:90,
+      details:'Review current crossea.vercel.app critically\nDecide: refine current OR full redesign?\nRequired sections: Hero, Services, How it Works, About, Contact\nBrand: purple/dark theme, professional B2B feel\nMobile responsive, fast load\nDeploy to crossea.com once approved'},
+    {text:'Create 3-day social media content batch for Crossea',cat:'crossea',pri:'med',date:TODAY,time:'',dur:30,
+      details:'Post 1: "What is Crossea?" intro post\nPost 2: Import-export made easy — problem/solution format\nPost 3: Industry stat + insight (global trade data)\nLinkedIn + Instagram\nHashtags: #Crossea #ImportExport #B2BLogistics #TradeSimplified'},
+    {text:'Plan influencer collabs for Crossea',cat:'crossea',pri:'low',date:TODAY,time:'',dur:20,
+      details:'Find logistics / export pages on LinkedIn\nIdentify B2B influencers (10k-100k followers)\nDM template focused on partnership / co-promotion\nTarget niche: SMB exporters, trade consultants'},
+
+    // ── PERSONAL ──
+    {text:'Message ₹6k person — request 2-3 day extension',cat:'personal',pri:'high',date:TODAY,time:'14:00',dur:2,
+      details:'Send on WhatsApp\nKeep it short and direct\nDo not over-explain'},
+    {text:'Send Joseph anna — show KL Radio progress (Message 2)',cat:'personal',pri:'high',date:TODAY,time:'16:00',dur:5,
+      details:'Keep tone casual and confident\nShare 1-2 key updates (35 responses, batch plan)\nDo not mention money yet'},
+    {text:'Check on plants 🌱',cat:'personal',pri:'low',date:TODAY,time:'',dur:5,
+      details:'Water if dry\nCheck sun exposure\nNote any new growth or issues'},
+    {text:'Manage all subscriptions — consolidate in one place',cat:'personal',pri:'med',date:TODAY,time:'',dur:20,
+      details:'List every active subscription (SaaS, hosting, tools)\nNote monthly cost for each\nCancel anything unused or redundant\nRecord in Google Sheets under "Monthly Spend"\nTarget: reduce by at least ₹500/mo'},
+    {text:'Refine music and blog pages',cat:'personal',pri:'med',date:TODAY,time:'',dur:30,
+      details:'Music page: update track list, fix embedded player if broken, add latest release\nBlog page: proofread last 2 posts, fix formatting\nCheck mobile view on both pages\nUpdate meta description / SEO tags'},
+    {text:'30 mins AMCAT / Elitmus prep',cat:'personal',pri:'med',date:TODAY,time:'',dur:30,
+      details:'Topic today: Data Analysis and Logical Reasoning\nComplete 10 practice questions minimum\nNote weak areas in revision doc\nTarget: 1 mock test this week'},
+    {text:'Drink water + eat something 🍎',cat:'personal',pri:'low',date:TODAY,time:'13:00',dur:5,
+      details:'Start with a full glass of water\nFruits or light snack midday\nProper meal before 2PM\nBiryani is approved for tonight 😄'},
   ];
 
-  tasks = def.map((t,i) => ({
-    ...t,
-    id: Date.now()+i,
-    done: false,
-    subtasks: [],
-    taskNotes: '',
-    elapsed: 0,
-    created: new Date().toISOString()
-  }))
-
-  // Insert all default tasks into Supabase
-  try {
-    const { error } = await db.from('tasks').insert(tasks.map(taskToRow))
-    if (error) throw error
-  } catch(e) {
-    console.error('seed error:', e)
-  }
+  tasks=def.map((t,i)=>({
+    ...t, id:Date.now()+i, done:false, subtasks:[],
+    taskNotes:'', elapsed:0, created:new Date().toISOString()
+  }));
+  try{
+    const {error}=await db.from('tasks').insert(tasks.map(taskToRow))
+    if(error) throw error
+  }catch(e){console.error('seed error:',e)}
 }
 
-// ══ RENDER ══
+// ══ RENDER ALL ══
 function renderAll(){
   let filtered=activeFilter==='all'?tasks:tasks.filter(t=>t.cat===activeFilter);
   const todayT=filtered.filter(t=>t.date===TODAY&&!t.done).sort(sortFn);
@@ -650,13 +648,14 @@ function renderAll(){
   document.getElementById('sbPct').textContent=pct+'%';
   Object.keys(CATS).forEach(c=>{
     const el=document.getElementById('nc-'+c);
-    if(el)el.textContent=tasks.filter(t=>t.cat===c&&!t.done).length;
+    if(el) el.textContent=tasks.filter(t=>t.cat===c&&!t.done).length;
   });
   document.getElementById('nc-all').textContent=tasks.filter(t=>!t.done).length;
+  // Update active nav
   document.querySelectorAll('.nav-item').forEach(el=>{
     el.classList.remove('active');
     const fn=el.getAttribute('onclick')||'';
-    if(fn.includes("'"+activeFilter+"'"))el.classList.add('active');
+    if(fn.includes("'"+activeFilter+"'")) el.classList.add('active');
   });
 }
 
@@ -665,7 +664,7 @@ function sortFn(a,b){const p={high:0,med:1,low:2};return(p[a.pri]||1)-(p[b.pri]|
 function renderList(id,list){
   const el=document.getElementById(id);
   if(!list.length){
-    el.innerHTML=`<div class="empty"><span>✨</span>${id==='list-done'?'Nothing completed yet':'All clear!'}</div>`;
+    el.innerHTML=`<div class="empty"><span>${id==='list-done'?'🎯':'✨'}</span>${id==='list-done'?'Nothing completed yet today':'All clear!'}</div>`;
     return;
   }
   el.innerHTML=list.map(t=>taskHTML(t)).join('');
@@ -673,11 +672,11 @@ function renderList(id,list){
 
 function taskHTML(t){
   const cat=CATS[t.cat]||{label:t.cat,cls:'c-eject'};
-  const pLabel=t.pri==='high'?'High':t.pri==='med'?'Med':'Low';
+  const pLabel={high:'High',med:'Med',low:'Low'}[t.pri]||'Med';
   const elapsed=t.elapsed||0;
   const elStr=elapsed>0?fmtTime(elapsed):'';
-  return `<div class="task-card ${t.done?'done':''}" onclick="openDetail(${t.id})">
-    <div class="tc-check ${t.done?'checked':''}" onclick="event.stopPropagation();toggleDone(${t.id})"></div>
+  return `<div class="task-card${t.done?' done':''}" onclick="openDetail(${t.id})">
+    <div class="tc-check${t.done?' checked':''}" onclick="event.stopPropagation();toggleDone(${t.id})"></div>
     <div class="tc-body">
       <div class="tc-text">${t.text}</div>
       <div class="tc-meta">
@@ -699,24 +698,24 @@ function taskHTML(t){
 
 // ══ CALENDAR ══
 function renderCal(){
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('calMonth').textContent=months[calMonth]+' '+calYear;
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calMonth').textContent=MONTHS[calMonthIdx]+' '+calYear;
   const grid=document.getElementById('calGrid');
   const heads=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   let html=heads.map(d=>`<div class="cal-day-head">${d}</div>`).join('');
-  const first=new Date(calYear,calMonth,1).getDay();
-  const days=new Date(calYear,calMonth+1,0).getDate();
-  const prevDays=new Date(calYear,calMonth,0).getDate();
+  const first=new Date(calYear,calMonthIdx,1).getDay();
+  const days=new Date(calYear,calMonthIdx+1,0).getDate();
+  const prevDays=new Date(calYear,calMonthIdx,0).getDate();
   for(let i=0;i<first;i++){
     const d=prevDays-first+1+i;
     html+=`<div class="cal-day other-month"><div class="cal-day-num">${d}</div></div>`;
   }
   for(let d=1;d<=days;d++){
-    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dateStr=`${calYear}-${String(calMonthIdx+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const dayTasks=tasks.filter(t=>t.date===dateStr);
     const isToday=dateStr===TODAY;
     const isSel=dateStr===calSelDate;
-    const dots=dayTasks.slice(0,5).map(t=>`<div class="cal-dot" style="background:${(CATS[t.cat]||{color:'#888'}).color}"></div>`).join('');
+    const dots=dayTasks.slice(0,6).map(t=>`<div class="cal-dot" style="background:${(CATS[t.cat]||{color:'#888'}).color}"></div>`).join('');
     html+=`<div class="cal-day${isToday?' today':''}${isSel?' selected':''}" onclick="selectCalDay('${dateStr}')">
       <div class="cal-day-num">${d}</div>
       <div class="cal-dot-row">${dots}</div>
@@ -732,34 +731,37 @@ function renderCalDay(){
   const opts={weekday:'long',month:'long',day:'numeric'};
   const d=new Date(calSelDate+'T12:00:00');
   document.getElementById('calSelLabel').textContent=d.toLocaleDateString('en-IN',opts);
-  const dayTasks=tasks.filter(t=>t.date===calSelDate);
+  const dayTasks=tasks.filter(t=>t.date===calSelDate).sort(sortFn);
   const el=document.getElementById('calDayTasks');
   if(!dayTasks.length){
-    el.innerHTML=`<div class="empty"><span>📭</span>No tasks for this day. Add one!</div>`;
+    el.innerHTML=`<div class="cal-empty-day">No tasks for this day — click "+ Add for this day" to add one.</div>`;
     return;
   }
   el.innerHTML=dayTasks.map(t=>taskHTML(t)).join('');
 }
 
 function calNav(dir){
-  calMonth+=dir;
-  if(calMonth>11){calMonth=0;calYear++}
-  if(calMonth<0){calMonth=11;calYear--}
+  calMonthIdx+=dir;
+  if(calMonthIdx>11){calMonthIdx=0;calYear++}
+  if(calMonthIdx<0){calMonthIdx=11;calYear--}
   renderCal();
 }
 
-function openAddForDate(){openAdd();document.getElementById('fDate').value=calSelDate}
+function openAddForDate(){
+  openAdd();
+  document.getElementById('fDate').value=calSelDate;
+}
 
 // ══ NOTES ══
 function renderNotes(){
   const grid=document.getElementById('notes-grid');
   const keys=Object.keys(notesData);
   if(!keys.length){
-    grid.innerHTML=`<div class="note-card"><div class="note-label">Quick Note</div><textarea class="note-ta" placeholder="Write anything here — ideas, plans, reminders..." onblur="quickSaveNote('default',this.value)"></textarea><button class="save-note-btn" onclick="quickSaveNote('default',document.querySelector('.note-ta').value)">Save</button></div>`;
+    grid.innerHTML=`<div class="note-card"><div class="note-label">Quick Note ✏️</div><textarea class="note-ta" id="note-default" placeholder="Write anything — ideas, plans, links, reminders..."></textarea><button class="save-note-btn" onclick="quickSaveNote('default',document.getElementById('note-default').value)">Save Note</button></div>`;
     return;
   }
   grid.innerHTML=keys.map(k=>`<div class="note-card">
-    <div class="note-label">${k} <span style="cursor:pointer;color:var(--red)" onclick="deleteNote('${k}')">✕</span></div>
+    <div class="note-label">${k} <span style="cursor:pointer;color:var(--muted2);font-size:10px" onclick="deleteNote('${k}')">✕</span></div>
     <textarea class="note-ta" id="note-${k}" onblur="quickSaveNote('${k}',this.value)">${notesData[k]}</textarea>
     <button class="save-note-btn" onclick="quickSaveNote('${k}',document.getElementById('note-${k}').value)">Save</button>
   </div>`).join('');
@@ -767,20 +769,23 @@ function renderNotes(){
 
 async function quickSaveNote(key,val){
   notesData[key]=val;
+  localStorage.setItem('dhq-notes-cache',JSON.stringify(notesData));
   await saveNotes();
-  showToast('📝 Saved!');
+  showToast('📝 Note saved!');
 }
 
 async function deleteNote(key){
+  if(!confirm('Delete this note?')) return;
   delete notesData[key];
+  localStorage.setItem('dhq-notes-cache',JSON.stringify(notesData));
   await saveNotes();
   renderNotes();
 }
 
 function addNoteCard(){
   const label=prompt('Note title?');
-  if(!label) return;
-  notesData[label]='';
+  if(!label||!label.trim()) return;
+  notesData[label.trim()]='';
   saveNotes();
   renderNotes();
 }
@@ -790,30 +795,21 @@ async function toggleDone(id){
   const t=tasks.find(t=>t.id===id);
   if(!t) return;
   t.done=!t.done;
-
-  // ✅ FIX 2: Update UI instantly
-  renderAll(); renderCalDay();
+  renderAll();renderCalDay();
   showToast(t.done?'✅ Done!':'↩️ Reopened');
   if(t.done) burst();
-
-  // Save to Supabase + cache in background
-  localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
-  db.from('tasks').update({ done: t.done }).eq('id', id)
-    .then(({ error }) => { if(error) console.error('sync error:', error); });
+  localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks));
+  db.from('tasks').update({done:t.done}).eq('id',id).then(({error})=>{if(error)console.error(error)});
 }
 
 async function deleteTask(id){
+  if(!confirm('Delete this task?')) return;
   tasks=tasks.filter(t=>t.id!==id);
-
-  // ✅ FIX 3: Update UI instantly
-  renderAll(); renderCalDay();
+  renderAll();renderCalDay();
   if(detailId===id) closeModal('detailModal');
   showToast('🗑️ Deleted');
-
-  // Delete from Supabase + cache in background
-  localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
-  db.from('tasks').delete().eq('id', id)
-    .then(({ error }) => { if(error) console.error('delete error:', error); });
+  localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks));
+  db.from('tasks').delete().eq('id',id).then(({error})=>{if(error)console.error(error)});
 }
 
 function setFilter(cat){activeFilter=cat;renderAll()}
@@ -830,7 +826,7 @@ function openAdd(){
   document.getElementById('fTime').value='';
   document.getElementById('fDur').value='';
   openModal('addModal');
-  setTimeout(()=>document.getElementById('fText').focus(),100);
+  setTimeout(()=>document.getElementById('fText').focus(),120);
 }
 
 function openEdit(id){
@@ -846,13 +842,15 @@ function openEdit(id){
   document.getElementById('fTime').value=t.time||'';
   document.getElementById('fDur').value=t.dur||'';
   openModal('addModal');
+  setTimeout(()=>document.getElementById('fText').focus(),120);
 }
 
 async function saveTask(){
   const text=document.getElementById('fText').value.trim();
-  if(!text){showToast('⚠️ Enter task description');return}
+  if(!text){showToast('⚠️ Enter a task description');return}
   const data={
-    text,details:document.getElementById('fDetails').value,
+    text,
+    details:document.getElementById('fDetails').value,
     cat:document.getElementById('fCat').value,
     pri:document.getElementById('fPri').value,
     date:document.getElementById('fDate').value,
@@ -861,32 +859,27 @@ async function saveTask(){
   };
   if(editingId){
     const idx=tasks.findIndex(t=>t.id===editingId);
-    if(idx>-1) tasks[idx]={...tasks[idx],...data};
-
-    // ✅ FIX 4: Close and render instantly
+    if(idx>-1){
+      // Reset subtasks if details changed
+      const oldDetails=(tasks[idx].details||'').trim();
+      if(data.details.trim()!==oldDetails) data.subtasks=[];
+      tasks[idx]={...tasks[idx],...data};
+    }
     closeModal('addModal');
-    renderAll(); renderCalDay(); renderCal();
-    showToast('✏️ Updated!');
-
-    // Save in background
-    localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
-    db.from('tasks').update(taskToRow(tasks[idx])).eq('id', editingId)
-      .then(({ error }) => { if(error) console.error('update error:', error); });
-
-  } else {
+    renderAll();renderCalDay();renderCal();
+    showToast('✏️ Task updated!');
+    localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks));
+    db.from('tasks').update(taskToRow(tasks[idx]||tasks.find(t=>t.id===editingId))).eq('id',editingId)
+      .then(({error})=>{if(error)console.error(error)});
+  }else{
     const newTask={...data,id:Date.now(),done:false,subtasks:[],taskNotes:'',elapsed:0,created:new Date().toISOString()};
     tasks.push(newTask);
-
-    // ✅ FIX 5: Close and render instantly
     closeModal('addModal');
-    renderAll(); renderCalDay(); renderCal();
+    renderAll();renderCalDay();renderCal();
     showToast('✅ Task added!');
     scheduleReminder(newTask);
-
-    // Insert in background
-    localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
-    db.from('tasks').insert([taskToRow(newTask)])
-      .then(({ error }) => { if(error) console.error('insert error:', error); });
+    localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks));
+    db.from('tasks').insert([taskToRow(newTask)]).then(({error})=>{if(error)console.error(error)});
   }
   editingId=null;
 }
@@ -903,15 +896,14 @@ function openDetail(id){
   document.getElementById('d-cat').textContent=cat.label;
   document.getElementById('d-cat').className='detail-cat-badge '+cat.cls;
   document.getElementById('d-title').textContent=t.text;
-  const pLabel=t.pri==='high'?'🔴 High Priority':t.pri==='med'?'🟡 Medium':'🟢 Low';
+  const pLabel={high:'🔴 High Priority',med:'🟡 Medium',low:'🟢 Low'}[t.pri]||'🟡 Medium';
   let metaHTML=`<span class="tc-pri p-${t.pri}">${pLabel}</span>`;
-  if(t.time)metaHTML+=`<span class="tc-time">🕐 ${t.time}</span>`;
-  if(t.dur)metaHTML+=`<span class="tc-time">⏱ Est. ${t.dur} min</span>`;
-  if(t.date)metaHTML+=`<span class="tc-time">📅 ${t.date}</span>`;
+  if(t.time) metaHTML+=`<span class="tc-time">🕐 ${t.time}</span>`;
+  if(t.dur) metaHTML+=`<span class="tc-time">⏱ Est. ${t.dur} min</span>`;
+  if(t.date) metaHTML+=`<span class="tc-time">📅 ${t.date}</span>`;
   document.getElementById('d-meta').innerHTML=metaHTML;
-  document.getElementById('d-est').textContent=t.dur?`Estimated: ${t.dur} minutes`:'';
-  const details=t.details||'';
-  const lines=details.split('\n').map(l=>l.trim()).filter(l=>l);
+  document.getElementById('d-est').textContent=t.dur?`Estimated time: ${t.dur} minutes`:'';
+  const lines=(t.details||'').split('\n').map(l=>l.trim()).filter(l=>l);
   if(lines.length){
     document.getElementById('d-subtasks-wrap').style.display='block';
     if(!t.subtasks||t.subtasks.length!==lines.length){
@@ -919,17 +911,18 @@ function openDetail(id){
     }
     document.getElementById('d-subtasks').innerHTML=t.subtasks.map((s,i)=>`
       <li class="subtask-item">
-        <div class="subtask-check ${s.done?'done':''}" onclick="toggleSubtask(${id},${i})"></div>
-        <span class="subtask-text ${s.done?'done-text':''}">${s.text}</span>
+        <div class="subtask-check${s.done?' done':''}" onclick="toggleSubtask(${id},${i})"></div>
+        <span class="subtask-text${s.done?' done-text':''}">${s.text}</span>
       </li>`).join('');
-  } else {
+  }else{
     document.getElementById('d-subtasks-wrap').style.display='none';
   }
   document.getElementById('d-notes').value=t.taskNotes||'';
+  const completeBtn=document.getElementById('d-complete-btn');
+  completeBtn.textContent=t.done?'↩ Reopen Task':'✓ Mark Complete';
+  completeBtn.style.background=t.done?'var(--yellow)':'var(--green)';
   document.getElementById('d-timer-start').textContent='▶ Start';
   document.getElementById('d-timer-start').className='dt-btn dt-start';
-  const footerBtn=document.querySelector('.df-btn');
-  if(footerBtn)footerBtn.textContent=t.done?'↩ Reopen':'✓ Mark Complete';
   openModal('detailModal');
 }
 
@@ -937,7 +930,8 @@ async function toggleSubtask(tid,idx){
   const t=tasks.find(t=>t.id===tid);
   if(!t||!t.subtasks) return;
   t.subtasks[idx].done=!t.subtasks[idx].done;
-  await db.from('tasks').update({ subtasks: t.subtasks }).eq('id', tid)
+  localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks));
+  await db.from('tasks').update({subtasks:t.subtasks}).eq('id',tid);
   openDetail(tid);
 }
 
@@ -947,30 +941,25 @@ async function detailCheck(){
   t.taskNotes=document.getElementById('d-notes').value;
   t.elapsed=timerSec;
   t.done=!t.done;
-
-  // ✅ Close modal and update UI instantly
-  renderAll(); renderCalDay();
+  renderAll();renderCalDay();
   closeModal('detailModal');
   showToast(t.done?'✅ Completed!':'↩️ Reopened');
   if(t.done) burst();
-
-  // Save in background
-  localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
-  db.from('tasks').update({ done: t.done, task_notes: t.taskNotes, elapsed: t.elapsed }).eq('id', detailId)
-    .then(({ error }) => { if(error) console.error('sync error:', error); });
+  localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks));
+  db.from('tasks').update({done:t.done,task_notes:t.taskNotes,elapsed:t.elapsed}).eq('id',detailId)
+    .then(({error})=>{if(error)console.error(error)});
 }
 
-function detailEdit(){closeModal('detailModal');setTimeout(()=>openEdit(detailId),100)}
-function detailDelete(){const t=tasks.find(t=>t.id===detailId);if(t)t.taskNotes=document.getElementById('d-notes').value;deleteTask(detailId)}
+function detailEdit(){closeModal('detailModal');setTimeout(()=>openEdit(detailId),120)}
+function detailDelete(){deleteTask(detailId)}
 
 function saveDetailNotes(){
   const t=tasks.find(t=>t.id===detailId);
   if(t){
     t.taskNotes=document.getElementById('d-notes').value;
     t.elapsed=timerSec;
-    // Save in background — don't block modal close
-    localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
-    db.from('tasks').update({ task_notes: t.taskNotes, elapsed: t.elapsed }).eq('id', detailId);
+    localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks));
+    db.from('tasks').update({task_notes:t.taskNotes,elapsed:t.elapsed}).eq('id',detailId);
   }
 }
 
@@ -982,8 +971,8 @@ function timerToggle(){
     document.getElementById('d-timer-start').textContent='▶ Resume';
     document.getElementById('d-timer-start').className='dt-btn dt-start';
     const t=tasks.find(t=>t.id===detailId);
-    if(t){t.elapsed=timerSec; db.from('tasks').update({ elapsed: timerSec }).eq('id', detailId)}
-  } else {
+    if(t){t.elapsed=timerSec;db.from('tasks').update({elapsed:timerSec}).eq('id',detailId)}
+  }else{
     timerRunning=true;
     document.getElementById('d-timer-start').textContent='⏸ Pause';
     document.getElementById('d-timer-start').className='dt-btn dt-pause';
@@ -992,7 +981,7 @@ function timerToggle(){
       updateTimerDisplay();
       if(timerSec%30===0){
         const t=tasks.find(t=>t.id===detailId);
-        if(t){t.elapsed=timerSec; db.from('tasks').update({ elapsed: timerSec }).eq('id', detailId)}
+        if(t){t.elapsed=timerSec;db.from('tasks').update({elapsed:timerSec}).eq('id',detailId)}
       }
     },1000);
   }
@@ -1002,12 +991,18 @@ function timerReset(){
   clearInterval(timerInterval);
   timerRunning=false;timerSec=0;
   updateTimerDisplay();
-  const startBtn=document.getElementById('d-timer-start');
-  if(startBtn){startBtn.textContent='▶ Start';startBtn.className='dt-btn dt-start';}
+  const btn=document.getElementById('d-timer-start');
+  if(btn){btn.textContent='▶ Start';btn.className='dt-btn dt-start';}
 }
 
-function updateTimerDisplay(){document.getElementById('d-timer-display').textContent=fmtTime(timerSec)}
-function fmtTime(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`}
+function updateTimerDisplay(){
+  const el=document.getElementById('d-timer-display');
+  if(el) el.textContent=fmtTime(timerSec);
+}
+function fmtTime(s){
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
 
 // ══ MODAL HELPERS ══
 function openModal(id){document.getElementById(id).classList.add('open')}
@@ -1042,8 +1037,8 @@ async function toggleNotif(){
     document.getElementById('notifBtn').classList.add('on');
     showToast('🔔 Reminders enabled!');
     tasks.forEach(scheduleReminder);
-    new Notification('Daily HQ 🦁',{body:"You'll be notified for tasks with times set!"});
-  } else showToast('⚠️ Permission denied');
+    new Notification('Daily HQ 🦁',{body:"Reminders active for all tasks with times!"});
+  }else showToast('⚠️ Permission denied');
 }
 
 function scheduleReminder(t){
@@ -1052,7 +1047,7 @@ function scheduleReminder(t){
   const diff=tDate-new Date();
   if(diff>0&&diff<86400000){
     setTimeout(()=>{if(!tasks.find(x=>x.id===t.id)?.done)new Notification('⏰ Task Reminder',{body:t.text,tag:String(t.id)})},diff);
-    if(diff>900000)setTimeout(()=>{if(!tasks.find(x=>x.id===t.id)?.done)new Notification('🔔 In 15 mins',{body:t.text,tag:String(t.id)+'p'})},diff-900000);
+    if(diff>900000)setTimeout(()=>{if(!tasks.find(x=>x.id===t.id)?.done)new Notification('🔔 In 15 min',{body:t.text,tag:String(t.id)+'p'})},diff-900000);
   }
 }
 
@@ -1065,25 +1060,39 @@ function showToast(msg){
 
 // ══ CONFETTI ══
 function burst(){
-  ['var(--accent)','var(--green)','var(--yellow)','var(--blue)'].forEach((c,i)=>{
+  ['var(--accent)','var(--green)','var(--yellow)','var(--blue)','var(--purple)'].forEach((c,i)=>{
     setTimeout(()=>{
-      for(let j=0;j<4;j++){
+      for(let j=0;j<5;j++){
         const d=document.createElement('div');
-        const a=Math.random()*360,r=60+Math.random()*80;
-        d.style.cssText=`position:fixed;width:7px;height:7px;background:${c};top:50%;left:50%;border-radius:50%;pointer-events:none;z-index:9999;transition:none`;
+        const a=Math.random()*360,r=60+Math.random()*100;
+        d.style.cssText=`position:fixed;width:7px;height:7px;background:${c};top:50%;left:50%;border-radius:50%;pointer-events:none;z-index:9999`;
         document.body.appendChild(d);
         requestAnimationFrame(()=>{
-          d.style.transition='all 0.7s ease-out';
+          d.style.transition='all 0.8s ease-out';
           d.style.transform=`translate(${Math.cos(a*(Math.PI/180))*r}px,${Math.sin(a*(Math.PI/180))*r}px)`;
           d.style.opacity='0';
         });
-        setTimeout(()=>d.remove(),800);
+        setTimeout(()=>d.remove(),900);
       }
-    },i*60);
+    },i*50);
   });
 }
 
-// ══ INIT ══
+// ══ FORCE RESEED ══
+async function forceReseed(){
+  if(!confirm('This will DELETE all existing tasks and reload the default task list. Continue?')) return;
+  showToast('⏳ Clearing and reloading...');
+  // Delete all from Supabase
+  try{
+    const {error}=await db.from('tasks').delete().neq('id',0)
+    if(error) throw error
+  }catch(e){console.error('clear error:',e)}
+  tasks=[];
+  await seed();
+  localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks));
+  renderAll();renderCal();
+  showToast('✅ Default tasks loaded!');
+}
 function initDate(){
   const d=new Date();
   document.getElementById('sbDate').textContent=d.toLocaleDateString('en-IN',{weekday:'long',month:'long',day:'numeric'});
@@ -1095,7 +1104,7 @@ document.addEventListener('keydown',e=>{
 });
 
 initDate();
-load();  // ← Loads from Supabase on startup
+load();
 </script>
 </body>
 </html>
