@@ -506,8 +506,19 @@ function rowToTask(r) {
 // ✅ STEP 4: Load from Supabase
 // ══════════════════════════════════════════
 async function load() {
+  // ✅ FIX 1: Show cached data instantly — no waiting for Supabase
+  const cached = localStorage.getItem('dhq-tasks-cache')
+  if (cached) {
+    try {
+      tasks = JSON.parse(cached)
+      notesData = JSON.parse(localStorage.getItem('dhq-notes-cache') || '{}')
+    } catch(e) { tasks = []; notesData = {} }
+    document.getElementById('loadingScreen').classList.add('hidden')
+    renderAll(); renderNotes(); renderCal()
+  }
+
+  // ✅ Then sync with Supabase in background
   try {
-    // Load tasks
     const { data: taskData, error: taskErr } = await db
       .from('tasks')
       .select('*')
@@ -516,7 +527,6 @@ async function load() {
     if (taskErr) throw taskErr
     tasks = (taskData || []).map(rowToTask)
 
-    // Load notes
     const { data: noteData } = await db
       .from('notes')
       .select('*')
@@ -525,19 +535,18 @@ async function load() {
 
     notesData = noteData ? (noteData.data || {}) : {}
 
+    // Update local cache for next load
+    localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks))
+    localStorage.setItem('dhq-notes-cache', JSON.stringify(notesData))
+
+    if (!tasks.length) await seed()
+
   } catch(e) {
-    console.error('Supabase load error:', e)
-    tasks = []
-    notesData = {}
+    console.error('Supabase sync error:', e)
   }
 
-  // First ever load — seed default tasks
-  if (!tasks.length) await seed()
-
   document.getElementById('loadingScreen').classList.add('hidden')
-  renderAll()
-  renderNotes()
-  renderCal()
+  renderAll(); renderNotes(); renderCal()
 }
 
 // ══════════════════════════════════════════
@@ -781,22 +790,30 @@ async function toggleDone(id){
   const t=tasks.find(t=>t.id===id);
   if(!t) return;
   t.done=!t.done;
-  // Only update this one task in Supabase
-  await db.from('tasks').update({ done: t.done }).eq('id', id)
-  renderAll();
-  renderCalDay();
+
+  // ✅ FIX 2: Update UI instantly
+  renderAll(); renderCalDay();
   showToast(t.done?'✅ Done!':'↩️ Reopened');
   if(t.done) burst();
+
+  // Save to Supabase + cache in background
+  localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
+  db.from('tasks').update({ done: t.done }).eq('id', id)
+    .then(({ error }) => { if(error) console.error('sync error:', error); });
 }
 
 async function deleteTask(id){
   tasks=tasks.filter(t=>t.id!==id);
-  // ✅ Delete from Supabase
-  await db.from('tasks').delete().eq('id', id)
-  renderAll();
-  renderCalDay();
+
+  // ✅ FIX 3: Update UI instantly
+  renderAll(); renderCalDay();
   if(detailId===id) closeModal('detailModal');
   showToast('🗑️ Deleted');
+
+  // Delete from Supabase + cache in background
+  localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
+  db.from('tasks').delete().eq('id', id)
+    .then(({ error }) => { if(error) console.error('delete error:', error); });
 }
 
 function setFilter(cat){activeFilter=cat;renderAll()}
@@ -845,21 +862,32 @@ async function saveTask(){
   if(editingId){
     const idx=tasks.findIndex(t=>t.id===editingId);
     if(idx>-1) tasks[idx]={...tasks[idx],...data};
-    // ✅ Update only this task in Supabase
-    await db.from('tasks').update(taskToRow(tasks[idx])).eq('id', editingId)
+
+    // ✅ FIX 4: Close and render instantly
+    closeModal('addModal');
+    renderAll(); renderCalDay(); renderCal();
     showToast('✏️ Updated!');
+
+    // Save in background
+    localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
+    db.from('tasks').update(taskToRow(tasks[idx])).eq('id', editingId)
+      .then(({ error }) => { if(error) console.error('update error:', error); });
+
   } else {
     const newTask={...data,id:Date.now(),done:false,subtasks:[],taskNotes:'',elapsed:0,created:new Date().toISOString()};
     tasks.push(newTask);
-    // ✅ Insert new task in Supabase
-    await db.from('tasks').insert([taskToRow(newTask)])
-    scheduleReminder(newTask);
+
+    // ✅ FIX 5: Close and render instantly
+    closeModal('addModal');
+    renderAll(); renderCalDay(); renderCal();
     showToast('✅ Task added!');
+    scheduleReminder(newTask);
+
+    // Insert in background
+    localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
+    db.from('tasks').insert([taskToRow(newTask)])
+      .then(({ error }) => { if(error) console.error('insert error:', error); });
   }
-  renderAll();
-  renderCalDay();
-  renderCal();
-  closeModal('addModal');
   editingId=null;
 }
 
@@ -919,23 +947,30 @@ async function detailCheck(){
   t.taskNotes=document.getElementById('d-notes').value;
   t.elapsed=timerSec;
   t.done=!t.done;
-  await db.from('tasks').update({ done: t.done, task_notes: t.taskNotes, elapsed: t.elapsed }).eq('id', detailId)
-  renderAll();
-  renderCalDay();
+
+  // ✅ Close modal and update UI instantly
+  renderAll(); renderCalDay();
   closeModal('detailModal');
   showToast(t.done?'✅ Completed!':'↩️ Reopened');
   if(t.done) burst();
+
+  // Save in background
+  localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
+  db.from('tasks').update({ done: t.done, task_notes: t.taskNotes, elapsed: t.elapsed }).eq('id', detailId)
+    .then(({ error }) => { if(error) console.error('sync error:', error); });
 }
 
 function detailEdit(){closeModal('detailModal');setTimeout(()=>openEdit(detailId),100)}
 function detailDelete(){const t=tasks.find(t=>t.id===detailId);if(t)t.taskNotes=document.getElementById('d-notes').value;deleteTask(detailId)}
 
-async function saveDetailNotes(){
+function saveDetailNotes(){
   const t=tasks.find(t=>t.id===detailId);
   if(t){
     t.taskNotes=document.getElementById('d-notes').value;
     t.elapsed=timerSec;
-    await db.from('tasks').update({ task_notes: t.taskNotes, elapsed: t.elapsed }).eq('id', detailId)
+    // Save in background — don't block modal close
+    localStorage.setItem('dhq-tasks-cache', JSON.stringify(tasks));
+    db.from('tasks').update({ task_notes: t.taskNotes, elapsed: t.elapsed }).eq('id', detailId);
   }
 }
 
