@@ -230,7 +230,20 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .p-med{background:var(--y2);color:var(--yellow)}
 .p-low{background:var(--g2);color:var(--green)}
 
-/* ── FAB (mobile floating add) ── */
+/* ── SYNC STATUS ── */
+.sync-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 20px;border-bottom:1px solid rgba(255,255,255,0.07);gap:8px}
+.sync-status{font-size:10px;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:0.3px;transition:color 0.3s}
+.sync-status.ok{color:rgba(42,158,92,0.8)}
+.sync-status.syncing{color:rgba(212,144,10,0.9);animation:pulse 1s infinite}
+.sync-status.error{color:rgba(232,42,42,0.8)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.refresh-btn{background:none;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.45);font-family:'Syne',sans-serif;font-weight:700;font-size:9px;padding:3px 9px;cursor:pointer;letter-spacing:0.5px;transition:all 0.15s;border-radius:3px}
+.refresh-btn:hover,.refresh-btn:active{border-color:rgba(42,158,92,0.5);color:rgba(42,158,92,0.9)}
+/* Mobile topbar sync dot */
+.mob-sync-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;transition:background 0.3s}
+.mob-sync-dot.ok{background:var(--green)}
+.mob-sync-dot.syncing{background:var(--yellow);animation:pulse 1s infinite}
+.mob-sync-dot.error{background:var(--red)}
 .fab{display:none}
 
 /* ── MOBILE TOP BAR ── */
@@ -336,7 +349,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <div class="mob-pct" id="mobPct">0%</div>
     <div class="mob-bar"><div class="mob-fill" id="mobFill" style="width:0%"></div></div>
   </div>
-  <button class="mob-menu-btn" onclick="openDrawer()">☰</button>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div class="mob-sync-dot" id="mobSyncDot" title="Sync status"></div>
+    <button class="mob-menu-btn" onclick="openDrawer()">☰</button>
+  </div>
 </div>
 
 <!-- MOBILE DRAWER OVERLAY -->
@@ -355,6 +371,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="sb-prog" style="padding:12px 20px">
     <div class="sb-prog-top"><span>Today</span><span id="drawerPct">0%</span></div>
     <div class="sb-bar"><div class="sb-fill" id="drawerFill" style="width:0%"></div></div>
+  </div>
+  <div class="sync-bar">
+    <span class="sync-status" id="drawerSyncStatus">Connecting...</span>
+    <button class="refresh-btn" onclick="manualRefresh();closeDrawer()">↻ Refresh</button>
   </div>
   <div class="sb-nav">
     <div class="sb-sec-label">Views</div>
@@ -415,6 +435,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="sb-prog">
     <div class="sb-prog-top"><span>Today's Progress</span><span id="sbPct">0%</span></div>
     <div class="sb-bar"><div class="sb-fill" id="sbFill" style="width:0%"></div></div>
+  </div>
+  <div class="sync-bar">
+    <span class="sync-status" id="syncStatus">Connecting...</span>
+    <button class="refresh-btn" onclick="manualRefresh()">↻ Refresh</button>
   </div>
   <div class="sb-nav">
     <div class="sb-sec-label">Views</div>
@@ -1160,6 +1184,73 @@ async function forceReseed(){
   showToast('✅ Default tasks loaded!')
 }
 
+// ══ AUTO SYNC (every 30s) ══
+let syncInterval=null
+let lastSyncTime=null
+let isSyncing=false
+
+async function syncFromDB(){
+  if(isSyncing)return
+  isSyncing=true
+  try{
+    const{data:td,error:te}=await db.from('tasks').select('*').order('created',{ascending:true})
+    if(te)throw te
+    const{data:nd}=await db.from('notes').select('*').eq('id',1).single()
+    // Only re-render if data actually changed
+    const newTasksJSON=JSON.stringify((td||[]).map(rowToTask))
+    const oldTasksJSON=JSON.stringify(tasks)
+    if(newTasksJSON!==oldTasksJSON){
+      tasks=(td||[]).map(rowToTask)
+      localStorage.setItem('dhq-tasks-cache',JSON.stringify(tasks))
+      renderAll();renderCalDay();renderCal()
+    }
+    if(nd&&nd.data){
+      notesData=nd.data
+      localStorage.setItem('dhq-notes-cache',JSON.stringify(notesData))
+    }
+    lastSyncTime=new Date()
+    updateSyncUI(false,false)
+  }catch(e){
+    console.error('Auto-sync error:',e)
+    updateSyncUI(false,true)
+  }finally{
+    isSyncing=false
+  }
+}
+
+function startAutoSync(){
+  if(syncInterval)clearInterval(syncInterval)
+  syncInterval=setInterval(syncFromDB,30000)
+}
+
+function updateSyncUI(syncing,error){
+  let txt='',cls=''
+  if(syncing){txt='🔄 Syncing...';cls='syncing'}
+  else if(error){txt='⚠️ Sync failed';cls='error'}
+  else if(lastSyncTime){
+    const s=Math.round((new Date()-lastSyncTime)/1000)
+    txt=s<5?'✓ Just synced':`✓ Synced ${s}s ago`
+    cls='ok'
+  }
+  // Update all sync status text elements
+  ;['syncStatus','drawerSyncStatus'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return
+    el.textContent=txt;el.className='sync-status '+cls
+  })
+  // Update mobile dot
+  const dot=document.getElementById('mobSyncDot')
+  if(dot)dot.className='mob-sync-dot '+cls
+}
+
+// Keep sync badge time text fresh
+setInterval(()=>{if(lastSyncTime&&!isSyncing)updateSyncUI(false,false)},5000)
+
+async function manualRefresh(){
+  updateSyncUI(true,false)
+  await syncFromDB()
+  showToast('🔄 Data refreshed!')
+}
+
 // ══ INIT ══
 function initDate(){
   const d=new Date()
@@ -1172,7 +1263,12 @@ document.addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey)&&e.key==='n'){e.preventDefault();openAdd()}
 })
 
-initDate();load()
+// Sync when tab becomes visible again (user switches back from another tab)
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden)syncFromDB()
+})
+
+initDate();load().then(()=>startAutoSync())
 </script>
 </body>
 </html>
